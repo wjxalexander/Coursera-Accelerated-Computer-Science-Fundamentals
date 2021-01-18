@@ -1,16 +1,17 @@
 /**
  * C++ program sending a Cube by reference.
- * 
+ *
  * @author
  *   Wade Fagen-Ulmschneider <waf@illinois.edu>
  */
 
-#include "../Cube.h"
 #include <iostream>
+
+#include "../Cube.h"
 
 using uiuc::Cube;
 
-bool sendCube(Cube & c) {    
+bool sendCube(Cube& c) {
   // ... logic to send a Cube somewhere ...
   return true;
 }

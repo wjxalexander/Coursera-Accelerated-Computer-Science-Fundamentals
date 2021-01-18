@@ -1,6 +1,6 @@
 /**
  * C++ puzzle program.  Try to figure out the result before running!
- * 
+ *
  * @author
  *   Wade Fagen-Ulmschneider <waf@illinois.edu>
  */
@@ -16,7 +16,7 @@ int main() {
   q = p;
   *q = 8;
   cout << *p << endl;
-
+  // 8
   q = new int;
   *q = 9;
   cout << *p << endl;

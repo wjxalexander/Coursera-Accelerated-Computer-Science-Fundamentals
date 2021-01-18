@@ -8,6 +8,4 @@ Shape::Shape(double width) : width_(width) {
   // Nothing.
 }
 
-double Shape::getWidth() const {
-  return width_;
-}
+double Shape::getWidth() const { return width_; }
