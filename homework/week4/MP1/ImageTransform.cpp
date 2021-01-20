@@ -18,9 +18,11 @@ Email:
 (...end multi-line comment.)
 ******************** */
 
+using std::abs;
+using std::pow;
+using std::sqrt;
 using uiuc::HSLAPixel;
 using uiuc::PNG;
-
 /**
  * Returns an image that has been transformed to grayscale.
  *
@@ -65,7 +67,21 @@ PNG grayscale(PNG image) {
  *
  * @return The image with a spotlight.
  */
-PNG createSpotlight(PNG image, int centerX, int centerY) { return image; }
+PNG createSpotlight(PNG image, int centerX, int centerY) {
+  for (unsigned x = 0; x < image.width(); x++) {
+    for (unsigned y = 0; y < image.height(); y++) {
+      HSLAPixel& pixel = image.getPixel(x, y);
+      const int horize_distance = x - centerX;
+      const int vertical_distance = y - centerY;
+      double distance =
+          sqrt(pow(horize_distance, 2) + pow(vertical_distance, 2));
+      double deviation = distance * 0.005 > 0.8 ? 0.8 : distance * 0.005;
+      pixel.l = pixel.l * (1 - deviation);
+    }
+  }
+
+  return image;
+}
 
 /**
  * Returns a image transformed to Illini colors.
@@ -77,25 +93,37 @@ PNG createSpotlight(PNG image, int centerX, int centerY) { return image; }
  *
  * @return The illinify'd image.
  **/
-
+double getDistance(double a, double b) {
+  const int half = 180;
+  const int full = 360;
+  const double directDistance = abs(a - b);
+  double ret;
+  if ((a >= half && b >= half) || (a <= half && b <= half)) {
+    ret = directDistance;
+  } else {
+    if (a > half && b < half) {
+      const double loopDistance = full - a + b;
+      ret = loopDistance < directDistance ? loopDistance : directDistance;
+    }
+    if (a < half && b > half) {
+      const double loopDistance = full - b + a;
+      ret = loopDistance < directDistance ? loopDistance : directDistance;
+    }
+  }
+  return ret;
+}
 PNG illinify(PNG image) {
-  const int illini_orange = 11;
-  const int illini_blue = 216;
+  const double illini_orange = 11;
+  const double illini_blue = 216;
 
   for (unsigned x = 0; x < image.width(); x++) {
     for (unsigned y = 0; y < image.height(); y++) {
       HSLAPixel& pixel = image.getPixel(x, y);
-      int blue_gap = std::abs(illini_blue - pixel.h);
-      int oragne_gap = std::abs(illini_orange - pixel.h);
-
-      if (blue_gap < oragne_gap) {
-        pixel.h = illini_blue;
-      } else {
-        pixel.h = illini_orange;
-      }
+      double blue_gap = getDistance(pixel.h, illini_blue);
+      double oragne_gap = getDistance(pixel.h, illini_orange);
+      pixel.h = blue_gap <= oragne_gap ? illini_blue : illini_orange;
     }
   }
-
   return image;
 }
 
@@ -111,4 +139,18 @@ PNG illinify(PNG image) {
  *
  * @return The watermarked image.
  */
-PNG watermark(PNG firstImage, PNG secondImage) { return firstImage; }
+PNG watermark(PNG firstImage, PNG secondImage) {
+  for (unsigned x = 0; x < firstImage.width(); x++) {
+    for (unsigned y = 0; y < firstImage.height(); y++) {
+      HSLAPixel& firstImagePixel = firstImage.getPixel(x, y);
+      HSLAPixel& secondImagePixel = secondImage.getPixel(x, y);
+      if (secondImagePixel.l == 1) {
+        const double newL =
+            firstImagePixel.l + 0.2 >= 1 ? 1 : firstImagePixel.l + 0.2;
+        firstImagePixel.l = newL;
+      }
+    }
+  }
+
+  return firstImage;
+}
