@@ -466,8 +466,6 @@ template <typename T>
 void LinkedList<T>::popBack() {
   // If list is empty, do nothing.
   if (!head_) return;
-  std::cout << "List size: " << size_ << std::endl;
-
   // If the tail item's prev is null, then this is the last and only
   // item in the list.
   if (!tail_->prev) {

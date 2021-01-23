@@ -37,6 +37,7 @@
 *.exe
 *.out
 *.app
+*.zip
 
 # Created by https://www.toptal.com/developers/gitignore/api/codeblocks
 # Edit at https://www.toptal.com/developers/gitignore?templates=codeblocks

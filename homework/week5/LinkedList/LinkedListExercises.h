@@ -77,13 +77,6 @@
   some interesting benchmarks on the speed of your code.
 
  ********************************************************************/
-#include <iostream>  // for std::cerr, std::cout
-
-#include "LinkedList.h"
-
-using std::cout;
-using std::endl;
-
 template <typename T>
 void LinkedList<T>::insertOrdered(const T& newData) {
   Node* head = getHeadPtr();
@@ -239,6 +232,73 @@ LinkedList<T> LinkedList<T>::merge(const LinkedList<T>& other) const {
   // the final result we want. This is what we will return at the end of
   // the function.
   LinkedList<T> merged;
+  if (left.size() == 0) {
+    merged = right;
+    return merged;
+  }
+  if (right.size() == 0) {
+    merged = left;
+    return merged;
+  }
+
+  Node* leftHeadPointer = left.getHeadPtr();
+  Node* rightHeadPointer = right.getHeadPtr();
+  // initialize
+  const T leftVal = leftHeadPointer->data;
+  const T rightVal = rightHeadPointer->data;
+  Node* firstMergedNode;
+  if (leftVal < rightVal) {
+    firstMergedNode = new Node(leftVal);
+    leftHeadPointer = leftHeadPointer->next;
+  } else {
+    firstMergedNode = new Node(rightVal);
+    rightHeadPointer = rightHeadPointer->next;
+  }
+  merged.head_ = firstMergedNode;
+  Node* mergedHeadPointer = merged.getHeadPtr();
+
+  while (leftHeadPointer && rightHeadPointer) {
+    const T leftVal = leftHeadPointer->data;
+    const T rightVal = rightHeadPointer->data;
+    Node* newNode;
+    if (leftVal > rightVal) {
+      newNode = new Node(rightVal);
+      rightHeadPointer = rightHeadPointer->next;
+    } else {
+      newNode = new Node(leftVal);
+      leftHeadPointer = leftHeadPointer->next;
+    }
+    mergedHeadPointer->next = newNode;
+    newNode->prev = mergedHeadPointer;
+    mergedHeadPointer = mergedHeadPointer->next;
+  }
+  if (leftHeadPointer) {
+    while (leftHeadPointer) {
+      const T val = leftHeadPointer->data;
+      Node* newNode = new Node(val);
+      mergedHeadPointer->next = newNode;
+      newNode->prev = mergedHeadPointer;
+      mergedHeadPointer = mergedHeadPointer->next;
+      leftHeadPointer = leftHeadPointer->next;
+    }
+  }
+  if (rightHeadPointer) {
+    while (rightHeadPointer) {
+      const T val = rightHeadPointer->data;
+      Node* newNode = new Node(val);
+      mergedHeadPointer->next = newNode;
+      newNode->prev = mergedHeadPointer;
+      mergedHeadPointer = mergedHeadPointer->next;
+      rightHeadPointer = rightHeadPointer->next;
+    }
+  }
+
+  Node* finalMergedHeadPointer = merged.getHeadPtr();
+  while (finalMergedHeadPointer) {
+    merged.size_++;
+    merged.tail_ = finalMergedHeadPointer;
+    finalMergedHeadPointer = finalMergedHeadPointer->next;
+  }
 
   // -----------------------------------------------------------
   // TODO: Your code here!

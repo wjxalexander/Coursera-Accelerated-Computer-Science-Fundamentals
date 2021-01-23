@@ -202,96 +202,96 @@ void informalTests() {
     if (l2 == expected && !l2.isSorted()) errorReaction("Bug in isSorted");
   }
 
-  // {
-  //   std::cout << std::endl << "Testing merge():" << std::endl;
-  //   LinkedList<int> l;
-  //   l.pushBack(1);
-  //   l.pushBack(3);
-  //   l.pushBack(5);
-  //   LinkedList<int> r;
-  //   r.pushBack(-1);
-  //   r.pushBack(2);
-  //   r.pushBack(10);
-  //   r.pushBack(20);
+  {
+    std::cout << std::endl << "Testing merge():" << std::endl;
+    LinkedList<int> l;
+    l.pushBack(1);
+    l.pushBack(3);
+    l.pushBack(5);
+    LinkedList<int> r;
+    r.pushBack(-1);
+    r.pushBack(2);
+    r.pushBack(10);
+    r.pushBack(20);
 
-  //   LinkedList<int> expected;
-  //   expected.pushBack(-1);
-  //   expected.pushBack(1);
-  //   expected.pushBack(2);
-  //   expected.pushBack(3);
-  //   expected.pushBack(5);
-  //   expected.pushBack(10);
-  //   expected.pushBack(20);
+    LinkedList<int> expected;
+    expected.pushBack(-1);
+    expected.pushBack(1);
+    expected.pushBack(2);
+    expected.pushBack(3);
+    expected.pushBack(5);
+    expected.pushBack(10);
+    expected.pushBack(20);
 
-  //   std::cout << "Left List: " << l << "  ";
-  //   std::cout << "Right List: " << r << std::endl;
-  //   auto merged = l.merge(r);
-  //   std::cout << "Merged: " << merged << std::endl;
-  //   std::cout << "Expected: " << expected << std::endl;
-  //   if (merged != expected) errorReaction("Bug in merge");
-  // }
+    std::cout << "Left List: " << l << "  ";
+    std::cout << "Right List: " << r << std::endl;
+    auto merged = l.merge(r);
+    std::cout << "Merged: " << merged << std::endl;
+    std::cout << "Expected: " << expected << std::endl;
+    if (merged != expected) errorReaction("Bug in merge");
+  }
 
-  // {
-  //   std::cout << std::endl << "Testing mergeSortRecursive:" << std::endl;
-  //   LinkedList<int> l;
-  //   l.pushBack(10);
-  //   l.pushBack(4);
-  //   l.pushBack(7);
-  //   l.pushBack(5);
-  //   l.pushBack(8);
-  //   l.pushBack(6);
-  //   l.pushBack(-1);
-  //   l.pushBack(9);
+  {
+    std::cout << std::endl << "Testing mergeSortRecursive:" << std::endl;
+    LinkedList<int> l;
+    l.pushBack(10);
+    l.pushBack(4);
+    l.pushBack(7);
+    l.pushBack(5);
+    l.pushBack(8);
+    l.pushBack(6);
+    l.pushBack(-1);
+    l.pushBack(9);
 
-  //   LinkedList<int> expected;
-  //   expected.pushBack(-1);
-  //   expected.pushBack(4);
-  //   expected.pushBack(5);
-  //   expected.pushBack(6);
-  //   expected.pushBack(7);
-  //   expected.pushBack(8);
-  //   expected.pushBack(9);
-  //   expected.pushBack(10);
+    LinkedList<int> expected;
+    expected.pushBack(-1);
+    expected.pushBack(4);
+    expected.pushBack(5);
+    expected.pushBack(6);
+    expected.pushBack(7);
+    expected.pushBack(8);
+    expected.pushBack(9);
+    expected.pushBack(10);
 
-  //   std::cout << "(Before) List: " << l << std::endl;
-  //   l = l.mergeSortRecursive();
-  //   std::cout << "(After) List: " << l << std::endl;
-  //   std::cout << "isSorted: " << std::boolalpha << l.isSorted() << std::endl;
-  //   std::cout << "Expected: " << expected << std::endl;
-  //   if (l != expected)
-  //     errorReaction("Bug in mergeSortRecursive (check merge first)");
-  // }
+    std::cout << "(Before) List: " << l << std::endl;
+    l = l.mergeSortRecursive();
+    std::cout << "(After) List: " << l << std::endl;
+    std::cout << "isSorted: " << std::boolalpha << l.isSorted() << std::endl;
+    std::cout << "Expected: " << expected << std::endl;
+    if (l != expected)
+      errorReaction("Bug in mergeSortRecursive (check merge first)");
+  }
 
-  // {
-  //   std::cout << std::endl << "Testing mergeSortIterative:" << std::endl;
-  //   LinkedList<int> l;
-  //   l.pushBack(10);
-  //   l.pushBack(4);
-  //   l.pushBack(-1);
-  //   l.pushBack(5);
-  //   l.pushBack(8);
-  //   l.pushBack(6);
-  //   l.pushBack(7);
-  //   l.pushBack(9);
+  {
+    std::cout << std::endl << "Testing mergeSortIterative:" << std::endl;
+    LinkedList<int> l;
+    l.pushBack(10);
+    l.pushBack(4);
+    l.pushBack(-1);
+    l.pushBack(5);
+    l.pushBack(8);
+    l.pushBack(6);
+    l.pushBack(7);
+    l.pushBack(9);
 
-  //   LinkedList<int> expected;
-  //   expected.pushBack(-1);
-  //   expected.pushBack(4);
-  //   expected.pushBack(5);
-  //   expected.pushBack(6);
-  //   expected.pushBack(7);
-  //   expected.pushBack(8);
-  //   expected.pushBack(9);
-  //   expected.pushBack(10);
+    LinkedList<int> expected;
+    expected.pushBack(-1);
+    expected.pushBack(4);
+    expected.pushBack(5);
+    expected.pushBack(6);
+    expected.pushBack(7);
+    expected.pushBack(8);
+    expected.pushBack(9);
+    expected.pushBack(10);
 
-  //   std::cout << "(Before) List: " << l << std::endl;
-  //   l = l.mergeSortIterative();
-  //   std::cout << "(After) List: " << l << std::endl;
-  //   std::cout << "isSorted: " << std::boolalpha << l.isSorted() << std::endl;
-  //   std::cout << "Expected: " << expected << std::endl;
-  //   if (l != expected)
-  //     errorReaction("Bug in mergeSortIterative (check merge first)");
-  // }
+    std::cout << "(Before) List: " << l << std::endl;
+    l = l.mergeSortIterative();
+    std::cout << "(After) List: " << l << std::endl;
+    std::cout << "isSorted: " << std::boolalpha << l.isSorted() << std::endl;
+    std::cout << "Expected: " << expected << std::endl;
+    if (l != expected)
+      errorReaction("Bug in mergeSortIterative (check merge first)");
+  }
 
   std::cout
       << "\n\nInformal tests finished without crashing, but the output may "
