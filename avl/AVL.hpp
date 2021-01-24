@@ -36,7 +36,9 @@ const D& AVL<K, D>::find(const K& key) {
   //   through return-by-reference.
   // If not found, then the node returned has a value of nullptr.
   TreeNode*& node = _find(key, head_);
-  if (node == nullptr) { throw std::runtime_error("error in find(): key not found"); }
+  if (node == nullptr) {
+    throw std::runtime_error("error in find(): key not found");
+  }
   // We found the node, so return the actual data there, by reference.
   return node->data;
 }
@@ -82,9 +84,8 @@ bool AVL<K, D>::contains(const K& key) {
 // That is a pointer to a AVL<K, D>::TreeNode, returned by reference.
 
 template <typename K, typename D>
-typename AVL<K, D>::TreeNode*& AVL<K, D>::_find(
-  const K& key, TreeNode*& cur) const {
-
+typename AVL<K, D>::TreeNode*& AVL<K, D>::_find(const K& key,
+                                                TreeNode*& cur) const {
   // (Please also see the implementation of _iop_of below, which discusses
   //  some more nuances about returning references to pointers.)
 
@@ -104,29 +105,35 @@ typename AVL<K, D>::TreeNode*& AVL<K, D>::_find(
   // the language (and compiler) you're using. We can avoid those problems
   // by being sure to return references to actual pointers that are owned
   // by our tree.)
-  if (cur == nullptr) { return cur; }
+  if (cur == nullptr) {
+    return cur;
+  }
   // [Base case 2: When the key is found]
   // If we find a key that matches by value, then return the current TreeNode*
-  else if (key == cur->key) { return cur; }
+  else if (key == cur->key) {
+    return cur;
+  }
   // [When we need to search left]
   // If the key we're looking for is smaller than the current node's key,
   // then we should look to the left next.
-  else if (key < cur->key) { return _find(key, cur->left); }
+  else if (key < cur->key) {
+    return _find(key, cur->left);
+  }
   // [When we need to search right]
   // Otherwise, implicitly, the key we're looking for is larger than the
   // current node's key. (We know this because it's not equal and not less.)
   // So we should search to the right next.
-  else { return _find(key, cur->right); }
-
+  else {
+    return _find(key, cur->right);
+  }
 }
 
 /**
-* insert()
-* Inserts `key` and associated `data` into the AVL tree.
-*/
+ * insert()
+ * Inserts `key` and associated `data` into the AVL tree.
+ */
 template <typename K, typename D>
 void AVL<K, D>::insert(const K& key, const D& data) {
-
   // This function will begin a recursion process that will find the place
   // to insert the new node, insert it, and then rebalance the tree as needed
   // while returning up the recursive call stack to this point.
@@ -137,12 +144,10 @@ void AVL<K, D>::insert(const K& key, const D& data) {
   // this is run or not is defined and initialized in the class definition
   // itself, but this line of code could also just be commented out.)
   runDebuggingChecks();
-
 }
 
 template <typename K, typename D>
 void AVL<K, D>::_find_and_insert(const K& key, const D& data, TreeNode*& cur) {
-
   // We let the "insert" function make the initial call to this one.
   // The basic logic here is similar to _find, but now we want to take
   // advantage of the call stack to ensure balance of everything from
@@ -158,38 +163,33 @@ void AVL<K, D>::_find_and_insert(const K& key, const D& data, TreeNode*& cur) {
     // the "ensure balance" function on it. We just return up the call
     // stack now.
     return;
-  }
-  else if (key == cur->key) {
+  } else if (key == cur->key) {
     // If we found a match for the key, then the key already exists,
     // so report an error. (For the sake of this example, let's disallow
     // duplicates. We could also do something nicer than this, like remove
     // the old key and then insert the new item to replace it.)
     throw std::runtime_error("error in insert(): key already exists");
-  }
-  else if (key < cur->key) {
+  } else if (key < cur->key) {
     // Search left and insert
     _find_and_insert(key, data, cur->left);
     // On the way back up, ensure the balance of this node
     _ensureBalance(cur);
     return;
-  }
-  else {
+  } else {
     // Search right and insert
     _find_and_insert(key, data, cur->right);
     // On the way back up, ensure the balance of this node
     _ensureBalance(cur);
     return;
   }
-
 }
 
 /**
-* remove()
-* Removes `key` from the AVL tree. Returns the associated data.
-*/
+ * remove()
+ * Removes `key` from the AVL tree. Returns the associated data.
+ */
 template <typename K, typename D>
 const D& AVL<K, D>::remove(const K& key) {
-
   // Begin the recursion process with this function that will find the
   // node to remove, remove it, and then rebalance the tree as needed
   // while it returns.
@@ -206,7 +206,6 @@ const D& AVL<K, D>::remove(const K& key) {
 
 template <typename K, typename D>
 const D& AVL<K, D>::_find_and_remove(const K& key, TreeNode*& cur) {
-
   // We let the "remove" function make the initial call to this one.
   // The basic logic here is similar to _find, but now we want to take
   // advantage of the call stack to ensure balance of everything from
@@ -215,21 +214,18 @@ const D& AVL<K, D>::_find_and_remove(const K& key, TreeNode*& cur) {
   if (cur == nullptr) {
     // Key not found
     throw std::runtime_error("error in remove(): key not found");
-  }
-  else if (key == cur->key) {
+  } else if (key == cur->key) {
     // Found the node to remove; remove it recursively and return the data.
     // (There's no need to "ensure balance" of the node being removed.)
     return _remove(cur);
-  }
-  else if (key < cur->key) {
+  } else if (key < cur->key) {
     // Search left and remove
     const D& d = _find_and_remove(key, cur->left);
     // Ensure balance and update height of this ancestor
     // on the way back up the call stack:
     _ensureBalance(cur);
     return d;
-  }
-  else {
+  } else {
     // Search right and remove
     const D& d = _find_and_remove(key, cur->right);
     // Ensure balance and update height of this ancestor
@@ -237,7 +233,6 @@ const D& AVL<K, D>::_find_and_remove(const K& key, TreeNode*& cur) {
     _ensureBalance(cur);
     return d;
   }
-
 }
 
 // _remove will remove the node pointed to by the argument. Note that this
@@ -246,13 +241,14 @@ const D& AVL<K, D>::_find_and_remove(const K& key, TreeNode*& cur) {
 // it points to anymore after the function call.
 template <typename K, typename D>
 const D& AVL<K, D>::_remove(TreeNode*& node) {
-
   // If the node we are trying to remove is a nullptr, then it's an error,
   // as even if we'd like to "do nothing" here as a base case, we must return
   // a const reference to some data removed, and there is none. In practice
   // you would want to add more features to your class for handling these
   // situations efficiently in a way that makes sense for your users.
-  if (!node) { throw std::runtime_error("error: _remove() used on nullptr"); }
+  if (!node) {
+    throw std::runtime_error("error: _remove() used on nullptr");
+  }
 
   // When you are studying the cases below, remember: Right now, "node" is
   // the actual pointer that this node's parent holds, which points to this
@@ -332,9 +328,8 @@ const D& AVL<K, D>::_remove(TreeNode*& node) {
 // positions of BOTH nodes after the call, for some purpose, then you could
 // extend this to return two new references.
 template <typename K, typename D>
-typename AVL<K, D>::TreeNode*& AVL<K, D>::_swap_nodes(
-  TreeNode*& node1, TreeNode*& node2) {
-
+typename AVL<K, D>::TreeNode*& AVL<K, D>::_swap_nodes(TreeNode*& node1,
+                                                      TreeNode*& node2) {
   // More information on the problem we need to solve here:
 
   // We need to swap the logical positions of these two nodes in the tree,
@@ -397,29 +392,25 @@ typename AVL<K, D>::TreeNode*& AVL<K, D>::_swap_nodes(
     // This is the actual pointer in the tree that is now pointing to what
     // was our original node1 object, so return it by reference.
     return node1->left;
-  }
-  else if (node1->right == node2) {
+  } else if (node1->right == node2) {
     std::swap(node1->left, node2->left);
     node1->right = orig_node2->right;
     orig_node2->right = node1;
     node1 = orig_node2;
     return node1->right;
-  }
-  else if (node2->left == node1) {
+  } else if (node2->left == node1) {
     std::swap(node2->right, node1->right);
     node2->left = orig_node1->left;
     orig_node1->left = node2;
     node2 = orig_node1;
     return node2->left;
-  }
-  else if (node2->right == node1) {
+  } else if (node2->right == node1) {
     std::swap(node2->left, node1->left);
     node2->right = orig_node1->right;
     orig_node1->right = node2;
     node2 = orig_node1;
     return node2->right;
-  }
-  else {
+  } else {
     // If the two nodes aren't adjacent in the tree, it's a lot easier.
     // We can swap their child pointers and swap their main pointers,
     // and it just works. (Again, the easiest way to see this is true is
@@ -442,7 +433,6 @@ typename AVL<K, D>::TreeNode*& AVL<K, D>::_swap_nodes(
   // std::cerr << "\nn1: " << node1 << " n2: " << node2
   //   << "\n n1l: " << node1->left << " n1r: " << node1->right
   //   << "\n n2l: " << node2->left << " n2r: " << node2->right << std::endl;
-
 }
 
 template <typename K, typename D>
@@ -458,7 +448,6 @@ void AVL<K, D>::_updateHeight(TreeNode*& cur) {
 
 template <typename K, typename D>
 void AVL<K, D>::_ensureBalance(TreeNode*& cur) {
-
   // Base case for safety: do nothing if cur is nullptr.
   if (!cur) return;
 
@@ -471,8 +460,10 @@ void AVL<K, D>::_ensureBalance(TreeNode*& cur) {
     msg += std::to_string(initial_balance);
     msg += " ; This should never happen here.";
     std::cerr << "key: " << cur->key << " data: " << cur->data << std::endl;
-    std::cerr << "nl: " << cur->left->key << " nr: " << cur->right->key << std::endl;
-    std::cerr << "hl: " << _get_height(cur->left) << " hr: " << _get_height(cur->right) << std::endl;
+    std::cerr << "nl: " << cur->left->key << " nr: " << cur->right->key
+              << std::endl;
+    std::cerr << "hl: " << _get_height(cur->left)
+              << " hr: " << _get_height(cur->right) << std::endl;
     throw std::runtime_error(msg);
   }
 
@@ -484,27 +475,22 @@ void AVL<K, D>::_ensureBalance(TreeNode*& cur) {
     const int l_balance = _get_balance_factor(cur->left);
     if (l_balance == -1 || l_balance == 0) {
       _rotateRight(cur);
-    }
-    else if (l_balance == 1) {
+    } else if (l_balance == 1) {
       _rotateLeftRight(cur);
-    }
-    else {
+    } else {
       // Error checking
       std::string msg("ERROR: l_balance has unexpected value: ");
       msg += std::to_string(l_balance);
       msg += " ; This should never happen here.";
       throw std::runtime_error(msg);
     }
-  }
-  else if (initial_balance == 2) {
+  } else if (initial_balance == 2) {
     const int r_balance = _get_balance_factor(cur->right);
     if (r_balance == 1 || r_balance == 0) {
       _rotateLeft(cur);
-    }
-    else if (r_balance == -1) {
+    } else if (r_balance == -1) {
       _rotateRightLeft(cur);
-    }
-    else {
+    } else {
       // Error checking
       std::string msg("ERROR: r_balance has unexpected value: ");
       msg += std::to_string(r_balance);
@@ -533,12 +519,10 @@ void AVL<K, D>::_ensureBalance(TreeNode*& cur) {
     msg += " ; Something went wrong.";
     throw std::runtime_error(msg);
   }
-
 }
 
 template <typename K, typename D>
 void AVL<K, D>::_rotateLeft(TreeNode*& cur) {
-
   // Here, cur points to the original top-most node that roots the subtree
   // where we will do the left rotation. You might also want to refer
   // to the lecture slides about "generic left rotation".
@@ -578,12 +562,10 @@ void AVL<K, D>::_rotateLeft(TreeNode*& cur) {
   // now the lower of the two, and y's update will depend upon it.
   _updateHeight(x);
   _updateHeight(y);
-
 }
 
 template <typename K, typename D>
 void AVL<K, D>::_rotateRight(TreeNode*& cur) {
-
   // This implementation is a mirror image of _rotateLeft.
 
   if (!cur) {
@@ -603,12 +585,10 @@ void AVL<K, D>::_rotateRight(TreeNode*& cur) {
 
   _updateHeight(x);
   _updateHeight(y);
-
 }
 
 template <typename K, typename D>
 void AVL<K, D>::_rotateRightLeft(TreeNode*& cur) {
-
   // Here, cur points to the original top-most node that roots the subtree
   // where we will do the rotation. You might also want to refer to the
   // lecture slides about "generic right-left rotation".
@@ -631,12 +611,10 @@ void AVL<K, D>::_rotateRightLeft(TreeNode*& cur) {
 
   // Perform a left rotation on cur.
   _rotateLeft(cur);
-
 }
 
 template <typename K, typename D>
 void AVL<K, D>::_rotateLeftRight(TreeNode*& cur) {
-
   // Similar to _rotateRightLeft
 
   if (!cur) {
@@ -646,16 +624,15 @@ void AVL<K, D>::_rotateLeftRight(TreeNode*& cur) {
   _rotateLeft(cur->left);
 
   _rotateRight(cur);
-
 }
 
 template <typename K, typename D>
 const D& AVL<K, D>::_iopRemove(TreeNode*& targetNode) {
-
   // Here, the target node means the node we intend to remove.
 
   if (!targetNode) {
-    throw std::runtime_error("ERROR: _iopRemove(TreeNode*& targetNode) called on nullptr");
+    throw std::runtime_error(
+        "ERROR: _iopRemove(TreeNode*& targetNode) called on nullptr");
   }
 
   // Kick-start the IOP-finding process with the left child of the target,
@@ -682,8 +659,8 @@ const D& AVL<K, D>::_iopRemove(TreeNode*& targetNode) {
 }
 
 template <typename K, typename D>
-const D& AVL<K, D>::_iopRemove(TreeNode*& targetNode, TreeNode*& iopAncestor, bool isInitialCall) {
-
+const D& AVL<K, D>::_iopRemove(TreeNode*& targetNode, TreeNode*& iopAncestor,
+                               bool isInitialCall) {
   // Here, iopAncestor is pointing to either the most recent ancestor node
   // on the path as we head down to the actual IOP, or it is the IOP itself.
   // (That is the base case that we will reach.)
@@ -692,11 +669,15 @@ const D& AVL<K, D>::_iopRemove(TreeNode*& targetNode, TreeNode*& iopAncestor, bo
   // the way down, and otherwise, we set it to false (when we recurse here).
 
   if (!targetNode) {
-    throw std::runtime_error("ERROR: _iopRemove(TreeNode*& targetNode, TreeNode*& iopAncestor): targetNode is null");
+    throw std::runtime_error(
+        "ERROR: _iopRemove(TreeNode*& targetNode, TreeNode*& iopAncestor): "
+        "targetNode is null");
   }
 
   if (!iopAncestor) {
-    throw std::runtime_error("ERROR: _iopRemove(TreeNode*& targetNode, TreeNode*& iopAncestor): iopAncestor is null");
+    throw std::runtime_error(
+        "ERROR: _iopRemove(TreeNode*& targetNode, TreeNode*& iopAncestor): "
+        "iopAncestor is null");
   }
 
   if (iopAncestor->right != nullptr) {
@@ -749,8 +730,7 @@ const D& AVL<K, D>::_iopRemove(TreeNode*& targetNode, TreeNode*& iopAncestor, bo
     }
 
     return d;
-  }
-  else {
+  } else {
     // Base case: Here, iopAncestor points to the actual IOP.
 
     // We found the IoP. Swap the nodes by location, altering the pointers:
@@ -794,7 +774,6 @@ const D& AVL<K, D>::_iopRemove(TreeNode*& targetNode, TreeNode*& iopAncestor, bo
     const D& d = _remove(movedTarget);
     return d;
   }
-
 }
 
 // Include the remaining headers in this series of related header files
