@@ -51,9 +51,9 @@
 StringIntMap makeWordCounts(const StringVec& words) {
   // https://stackoverflow.com/questions/1939953/how-to-find-if-a-given-key-exists-in-a-c-stdmap?
   StringIntMap wordcount_map;
-  for (auto stringItem : words) {
-    wordcount_map.count(stringItem) ? wordcount_map.at(stringItem) += 1
-                                    : wordcount_map[stringItem] = 1;
+  for (auto word : words) {
+    wordcount_map.count(word) ? wordcount_map.at(word) += 1
+                              : wordcount_map[word] = 1;
   }
   return wordcount_map;
 }
@@ -93,11 +93,7 @@ StringIntMap makeWordCounts(const StringVec& words) {
 
 int lookupWithFallback(const StringIntMap& wordcount_map,
                        const std::string& key, int fallbackVal) {
-  // =================================================
-  // EXERCISE 2 WORKSPACE: YOUR CODE HERE
-  // =================================================
-
-  return -1337;  // Change this!
+  return wordcount_map.count(key) ? wordcount_map.at(key) : fallbackVal;
 }
 
 // =========================================================================
