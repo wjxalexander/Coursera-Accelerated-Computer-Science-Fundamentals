@@ -65,9 +65,9 @@ void informalTests() {
   // If you want to focus on a specific part, you could comment out some of
   // these.
   wordcountTests();
-  // lookupWithFallbackTests();
-  // hashingDemo();
-  // palindromeTests();
+  lookupWithFallbackTests();
+  hashingDemo();
+  palindromeTests();
   // yourOwnTests();
 
   std::cout
